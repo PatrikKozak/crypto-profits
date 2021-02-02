@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Home from './Home.js';
+import Results from './Results.js';
 
 class Layout extends Component {
 	constructor() {
@@ -18,10 +19,13 @@ class Layout extends Component {
 						<div className="logo">Crypto Currency Profits</div>
 
 						<nav className="menu">
-							<a href="#">Sign Up</a>
+							<a href="#" className="main-btn">
+								Sign Up
+							</a>
 						</nav>
 					</header>
-					<Home />
+
+					<Results />
 				</div>
 			</div>
 		);
