@@ -20,6 +20,27 @@ class Layout extends Component {
 		this.apiCall = this.apiCall.bind(this);
 	}
 
+	componentWillMount() {
+		var self = this;
+		axios
+			.get(
+				`https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR&e=Coinbase&ts=${moment().unix()}&extraParams=crypto_currency_profits`
+			)
+			.then(function(response) {
+				self.setState(
+					{
+						btcToday: response.data.BTC
+					},
+					() => {
+						console.log(self.state);
+					}
+				);
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
+	}
+
 	routingSystem() {
 		switch (this.state.location) {
 			case 'home':
@@ -60,6 +81,22 @@ class Layout extends Component {
 						data: response.data.BTC
 					},
 					() => {
+						const CP = self.state.data.USD;
+						const SP = self.state.btcToday.USD;
+						if (CP < SP) {
+							var gain = SP - CP;
+							var gainPercent = (gain / CP) * 100;
+							gainPercent = gainPercent.toFixed(2);
+
+							console.log(`profit percent is ${gainPercent}`);
+						} else {
+							var loss = CP - SP;
+							var lossPercent = (loss / CP) * 100;
+							lossPercent = lossPercent.toFixed(2);
+
+							console.log(`loss percent is ${lossPercent}`);
+						}
+
 						console.log(self.state);
 					}
 				);
