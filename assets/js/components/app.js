@@ -14,12 +14,15 @@ class Layout extends Component {
 			location: 'home',
 			date: moment(),
 			data: '',
-			cryptoAmount: 1
+			cryptoAmount: 1,
+			status: '',
+			totalStatus: ''
 		};
 		this.routingSystem = this.routingSystem.bind(this);
 		this.handleDateChange = this.handleDateChange.bind(this);
-		this.apiCall = this.apiCall.bind(this);
+		this.checkProfits = this.checkProfits.bind(this);
 		this.onInputChange = this.onInputChange.bind(this);
+		this.goBack = this.goBack.bind(this);
 	}
 
 	componentWillMount() {
@@ -51,11 +54,12 @@ class Layout extends Component {
 						handleDateChange={this.handleDateChange}
 						globalState={this.state}
 						onInputChange={this.onInputChange}
+						checkProfits={this.checkProfits}
 					/>
 				);
 				break;
 			case 'results':
-				return <Results />;
+				return <Results globalState={this.state} goBack={this.goBack} />;
 				break;
 			default:
 				return <Home />;
@@ -77,7 +81,7 @@ class Layout extends Component {
 		});
 	}
 
-	apiCall() {
+	checkProfits() {
 		//https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR&e=Coinbase&ts=1612289232&extraParams=crypto_currency_profits
 		var self = this;
 		axios
@@ -90,6 +94,7 @@ class Layout extends Component {
 						data: response.data.BTC
 					},
 					() => {
+						console.log(self.state);
 						const CP = self.state.data.USD;
 						var newCP = self.state.cryptoAmount * 100;
 						newCP = (newCP * CP) / 100;
@@ -105,15 +110,45 @@ class Layout extends Component {
 								`${self.state.cryptoAmount} bitcoin newSP: ${newSP}, SP: ${SP}, newCP: ${newCP}, CP: ${CP}`
 							);
 							console.log(`profit percent is ${gainPercent}`);
+
+							// Set state with totals and change location
+							self.setState(
+								{
+									location: 'results',
+									status: 'gain',
+									totalStatus: {
+										newCP: newCP.toFixed(2),
+										CP: CP,
+										newSP: newSP.toFixed(2),
+										SP: SP,
+										percent: gainPercent
+									}
+								},
+								() => console.log(self.state)
+							);
 						} else {
 							var loss = newCP - newSP;
 							var lossPercent = (loss / newCP) * 100;
 							lossPercent = lossPercent.toFixed(2);
 
 							console.log(`loss percent is ${lossPercent}`);
-						}
 
-						console.log(self.state);
+							// Set state with totals and change location
+							self.setState(
+								{
+									location: 'results',
+									status: 'loss',
+									totalStatus: {
+										newCP: newCP.toFixed(2),
+										CP: CP,
+										newSP: newSP.toFixed(2),
+										SP: SP,
+										percent: lossPercent
+									}
+								},
+								() => console.log(self.state)
+							);
+						}
 					}
 				);
 			})
@@ -122,12 +157,23 @@ class Layout extends Component {
 			});
 	}
 
+	goBack() {
+		this.setState({
+			location: 'home',
+			date: moment(),
+			data: '',
+			cryptoAmount: 1,
+			status: '',
+			totalStatus: ''
+		});
+	}
+
 	render() {
 		return (
 			<div className="home">
 				<div className="container">
 					<header>
-						<div className="logo" onClick={this.apiCall}>
+						<div className="logo" onClick={this.checkProfits}>
 							Crypto Currency Profits
 						</div>
 

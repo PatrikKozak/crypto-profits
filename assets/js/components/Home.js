@@ -35,7 +35,9 @@ export default class Home extends Component {
 							onChange={this.props.handleDateChange}
 						/>
 
-						<button type="submit">See Profits!</button>
+						<button type="submit" onClick={this.props.checkProfits}>
+							See Profits!
+						</button>
 					</div>
 				</div>
 			</section>
