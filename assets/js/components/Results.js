@@ -28,21 +28,12 @@ export default class Results extends Component {
 			<section id="results">
 				<div className="container">
 					<div className="col-md-12">
-						<div className="ads"></div>
-					</div>
-					<div className="col-md-12">
 						<h3>Your ${newCP} investment is now:</h3>
 						<h1>${newSP}</h1>
 						<h4>{this.checkGains()}</h4>
-						<a href="#" className="main-btn active">
-							Create account to keep track of your profits
+						<a href="#" className="main-btn active" onClick={this.props.goBack}>
+							Check Another Transaction
 						</a>
-						<a href="#" className="main-btn" onClick={this.props.goBack}>
-							Or Check Another Transaction
-						</a>
-					</div>
-					<div className="col-md-12">
-						<div className="ads"></div>
 					</div>
 				</div>
 			</section>
