@@ -13,11 +13,13 @@ class Layout extends Component {
 			name: 'Patrik',
 			location: 'home',
 			date: moment(),
-			data: ''
+			data: '',
+			cryptoAmount: 1
 		};
 		this.routingSystem = this.routingSystem.bind(this);
 		this.handleDateChange = this.handleDateChange.bind(this);
 		this.apiCall = this.apiCall.bind(this);
+		this.onInputChange = this.onInputChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -48,6 +50,7 @@ class Layout extends Component {
 					<Home
 						handleDateChange={this.handleDateChange}
 						globalState={this.state}
+						onInputChange={this.onInputChange}
 					/>
 				);
 				break;
@@ -68,12 +71,18 @@ class Layout extends Component {
 		);
 	}
 
+	onInputChange(event) {
+		this.setState({
+			cryptoAmount: event.target.value
+		});
+	}
+
 	apiCall() {
 		//https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR&e=Coinbase&ts=1612289232&extraParams=crypto_currency_profits
 		var self = this;
 		axios
 			.get(
-				'https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR&e=Coinbase&ts=1612289232&extraParams=crypto_currency_profits'
+				`https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR&e=Coinbase&ts=${self.state.date.unix()}&extraParams=crypto_currency_profits`
 			)
 			.then(function(response) {
 				self.setState(
@@ -82,16 +91,23 @@ class Layout extends Component {
 					},
 					() => {
 						const CP = self.state.data.USD;
+						var newCP = self.state.cryptoAmount * 100;
+						newCP = (newCP * CP) / 100;
 						const SP = self.state.btcToday.USD;
-						if (CP < SP) {
-							var gain = SP - CP;
-							var gainPercent = (gain / CP) * 100;
-							gainPercent = gainPercent.toFixed(2);
+						var newSP = self.state.cryptoAmount * 100;
+						newSP = (newSP * SP) / 100;
 
+						if (newCP < newSP) {
+							var gain = newSP - newCP;
+							var gainPercent = (gain / newCP) * 100;
+							gainPercent = gainPercent.toFixed(2);
+							console.log(
+								`${self.state.cryptoAmount} bitcoin newSP: ${newSP}, SP: ${SP}, newCP: ${newCP}, CP: ${CP}`
+							);
 							console.log(`profit percent is ${gainPercent}`);
 						} else {
-							var loss = CP - SP;
-							var lossPercent = (loss / CP) * 100;
+							var loss = newCP - newSP;
+							var lossPercent = (loss / newCP) * 100;
 							lossPercent = lossPercent.toFixed(2);
 
 							console.log(`loss percent is ${lossPercent}`);
