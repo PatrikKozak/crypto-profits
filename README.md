@@ -1,4 +1,7 @@
-# Crypto Currency Profits Project
+# Bitcoin Profits Project
+
+**About**
+Bitcoin Profits is a web application that can calculate your profit margins if invested in Bitcoin. By inputting the amount of bitcoin one owns and the date you bought your bitcoin amount, the app will output your profit gain from the day you bought Bitcoin to today. Bitcoin Profits utilizes an API to retrieve bitcoin's value on daily basis.
 
  **Install Node**
 	https://nodejs.org/en/
