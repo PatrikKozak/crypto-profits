@@ -22,7 +22,12 @@ export default class Results extends Component {
 	}
 
 	render() {
-		const { percent, newCP, newSP } = this.props.globalState.totalStatus;
+		const {
+			percent,
+			newCP,
+			newSP,
+			newProf
+		} = this.props.globalState.totalStatus;
 
 		return (
 			<section id="results">
@@ -31,6 +36,8 @@ export default class Results extends Component {
 						<h3>Your ${newCP} investment is now:</h3>
 						<h1>${newSP}</h1>
 						<h4>{this.checkGains()}</h4>
+						<br />
+						<h4>Your profit amount: ${newProf}</h4>
 						<a href="#" className="main-btn active" onClick={this.props.goBack}>
 							Check Another Transaction
 						</a>

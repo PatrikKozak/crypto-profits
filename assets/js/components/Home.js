@@ -16,7 +16,7 @@ export default class Home extends Component {
 			<section id="home">
 				<div className="container">
 					<div className="col-md-6">
-						<img src="/img/bitcoin-logo.png" className="bitcoin-logo" />
+						<img src="/img/bitcoin-logo-two.png" className="bitcoin-logo" />
 					</div>
 					<div className="col-md-6">
 						<h2>Enter Transaction:</h2>

@@ -101,6 +101,7 @@ class Layout extends Component {
 						const SP = self.state.btcToday.USD;
 						var newSP = self.state.cryptoAmount * 100;
 						newSP = (newSP * SP) / 100;
+						var newProf = newSP - newCP;
 
 						if (newCP < newSP) {
 							var gain = newSP - newCP;
@@ -121,7 +122,8 @@ class Layout extends Component {
 										CP: CP,
 										newSP: newSP.toFixed(2),
 										SP: SP,
-										percent: gainPercent
+										percent: gainPercent,
+										newProf: newProf.toFixed(2)
 									}
 								},
 								() => console.log(self.state)
@@ -143,7 +145,8 @@ class Layout extends Component {
 										CP: CP,
 										newSP: newSP.toFixed(2),
 										SP: SP,
-										percent: lossPercent
+										percent: lossPercent,
+										newProf: newProf.toFixed(2)
 									}
 								},
 								() => console.log(self.state)
